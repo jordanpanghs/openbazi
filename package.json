@@ -1,0 +1,28 @@
+{
+  "name": "openbazi",
+  "version": "1.0.0",
+  "description": "OpenBaZi — 開源子平八字與紫微斗數雙盤推算系統",
+  "author": "jordanpang",
+  "license": "MIT",
+  "main": "src/astrologyEngine.js",
+  "scripts": {
+    "build:ts": "tsc src/astrologyEngine.ts src/lunar-javascript.d.ts --target ES2020 --module commonjs --esModuleInterop --declaration --skipLibCheck",
+    "build:bundle": "esbuild src/browserEntry.ts --bundle --format=iife --platform=browser --target=es2020 --outfile=src/astrologyEngine.bundle.js",
+    "stamp": "node stamp_version.js",
+    "build": "npm run build:ts && npm run build:bundle && npm run stamp",
+    "test": "node test_engine.js",
+    "serve": "python -m http.server 8128 --bind 127.0.0.1"
+  },
+  "dependencies": {
+    "@types/node": "^25.6.0",
+    "html2canvas": "^1.4.1",
+    "iztro": "^2.5.8",
+    "jspdf": "^4.2.1",
+    "lunar-javascript": "^1.7.7",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.3"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.0"
+  }
+}

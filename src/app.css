@@ -1,0 +1,1570 @@
+:root {
+  --el-wood: #2e7d32;
+  --el-wood-bg: rgba(46, 125, 50, 0.11);
+  --el-fire: #c62828;
+  --el-fire-bg: rgba(198, 40, 40, 0.11);
+  --el-earth: #8d6e63;
+  --el-earth-bg: rgba(141, 110, 99, 0.14);
+  --el-metal: #d48806;
+  --el-metal-bg: rgba(212, 136, 6, 0.13);
+  --el-water: #1565c0;
+  --el-water-bg: rgba(21, 101, 192, 0.11);
+
+  --win-bg: #ece9d8;
+  --win-panel: #f7f5ec;
+  --win-border-dark: #7f9db9;
+  --win-group-border: #b8b49d;
+  --crimson: #9e1b1b;
+  --gold-accent: #b7791f;
+  --text-main: #1f2421;
+  --text-muted: #5a626a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "PMingLiU", "MingLiU", "Microsoft JhengHei", "PingFang TC", "Noto Serif TC", serif;
+  color: var(--text-main);
+  background: #dfdcca;
+  min-height: 100vh;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* --- Top Application Title Bar --- */
+.app-titlebar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  padding: 6px 14px;
+  background: linear-gradient(90deg, #1b365d 0%, #2a528a 55%, #1e3c68 100%);
+  color: #ffffff;
+  border-bottom: 2px solid #d4af37;
+}
+
+.brand-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-seal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  background: #a81c1c;
+  color: #fff8dc;
+  border: 1.5px solid #f3d27a;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 1px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+}
+
+.app-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.app-subtitle {
+  display: block;
+  font-size: 11.5px;
+  color: #dbe8ff;
+}
+
+.dialog-triggers {
+  display: flex;
+  gap: 6px;
+}
+
+.btn-utility {
+  background: #f5f2e4;
+  color: #1b365d;
+  border: 1px solid #c5b88a;
+  border-radius: 3px;
+  padding: 3px 9px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.btn-utility:hover {
+  background: #fff9df;
+}
+
+.btn-pdf {
+  background: linear-gradient(180deg, #fff6d6 0%, #f3d27a 100%);
+  color: #7c1818;
+  border-color: #d4af37;
+  font-weight: 700;
+}
+
+.btn-pdf:hover {
+  background: linear-gradient(180deg, #fffbe8 0%, #f7de94 100%);
+}
+
+.btn-pdf:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+/* --- Subtle Bilingual English Sub-labels --- */
+.en-sub {
+  font-size: 10.5px;
+  font-weight: 500;
+  opacity: 0.78;
+  margin-left: 2px;
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+.en-unit {
+  font-size: 9.5px;
+  font-weight: 500;
+  color: #646c75;
+  margin-left: 1px;
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+.en-tag {
+  font-size: 9.5px;
+  font-weight: 600;
+  opacity: 0.85;
+  margin-left: 1px;
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+/* --- Sticky Top Input Toolbar --- */
+.top-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: grid;
+  grid-template-columns: 172px minmax(440px, 1.38fr) minmax(365px, 1.15fr) 126px;
+  gap: 6px;
+  padding: 6px 10px;
+  background: var(--win-bg);
+  border-bottom: 2px solid #99947c;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.14);
+}
+
+.dlg-groupbox {
+  margin: 0;
+  padding: 4px 7px 6px;
+  border: 1px solid var(--win-group-border);
+  border-radius: 3px;
+  background: var(--win-panel);
+  min-width: 0;
+}
+
+.dlg-groupbox legend {
+  padding: 0 5px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #1b365d;
+}
+
+.win-input,
+.win-select {
+  height: 24px;
+  padding: 1px 4px;
+  font-size: 12.5px;
+  font-family: inherit;
+  color: #111;
+  background: #ffffff;
+  border: 1px solid var(--win-border-dark);
+  border-radius: 2px;
+}
+
+.win-btn {
+  height: 24px;
+  padding: 0 8px;
+  font-size: 12px;
+  font-family: inherit;
+  font-weight: 600;
+  color: #1f2421;
+  background: linear-gradient(180deg, #ffffff 0%, #e3dfd1 100%);
+  border: 1px solid #7f7b68;
+  border-radius: 2px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.win-btn:hover {
+  background: linear-gradient(180deg, #fffdf4 0%, #d8d2be 100%);
+}
+
+.win-btn:active {
+  transform: translateY(1px);
+}
+
+.btn-primary {
+  background: linear-gradient(180deg, #2d5ea8 0%, #1b3d73 100%);
+  color: #ffffff;
+  border-color: #122a52;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(180deg, #376ec0 0%, #214987 100%);
+}
+
+/* GroupBox 1: 姓名及性別 */
+.identity-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.name-input {
+  width: 100%;
+  font-weight: 600;
+}
+
+.gender-radios {
+  display: flex;
+  justify-content: space-between;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.radio-label,
+.checkbox-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 12px;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* GroupBox 2: 出生日期 */
+.date-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.date-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 3px;
+}
+
+.row-tag {
+  display: inline-block;
+  padding: 1px 5px;
+  font-size: 11.5px;
+  font-weight: 700;
+  border-radius: 2px;
+}
+
+.solar-tag {
+  background: #fbe9e7;
+  color: #b71c1c;
+  border: 1px solid #ef9a9a;
+}
+
+.lunar-tag {
+  background: #e3f2fd;
+  color: #0d47a1;
+  border: 1px solid #90caf9;
+}
+
+.year-select {
+  width: 68px;
+}
+
+.month-select,
+.day-select,
+.minute-select {
+  width: 50px;
+}
+
+.hour-select {
+  width: 118px;
+}
+
+.unit-label {
+  font-size: 12px;
+  color: #333;
+}
+
+/* GroupBox 3: 四柱八字 */
+.pillars-toolbar-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 52px) 1fr;
+  gap: 4px;
+  align-items: center;
+}
+
+.pillar-selector-col {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: stretch;
+}
+
+.pillar-col-header {
+  font-size: 11px;
+  text-align: center;
+  color: #555;
+  font-weight: 700;
+}
+
+.gz-select {
+  width: 100%;
+  text-align: center;
+  font-weight: 700;
+  height: 21px;
+  padding: 0 2px;
+}
+
+.pillar-options-col {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding-left: 4px;
+  border-left: 1px dashed #c8c4b0;
+}
+
+.prelichun-check {
+  color: #8e1818;
+  font-weight: 700;
+}
+
+.start-age-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.age-select {
+  width: 62px;
+  height: 21px;
+}
+
+.btn-pillars {
+  height: 21px;
+  font-size: 11.5px;
+  background: linear-gradient(180deg, #fdf6e2 0%, #e7d49e 100%);
+  border-color: #9e843c;
+}
+
+/* GroupBox 4: 更新命盤 */
+.update-controls {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 3px;
+  height: 100%;
+}
+
+/* --- Mobile Pane Switcher --- */
+.mobile-pane-tabs {
+  display: none;
+  gap: 6px;
+  padding: 6px 10px 0;
+}
+
+.pane-tab {
+  flex: 1;
+  padding: 6px 10px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  border: 1px solid #9e9982;
+  background: #e6e2d0;
+  border-radius: 4px 4px 0 0;
+  cursor: pointer;
+}
+
+.pane-tab.active {
+  background: #fffdf5;
+  color: #9e1b1b;
+  border-bottom-color: #fffdf5;
+}
+
+/* --- Main Dual-Chart Responsive Canvas --- */
+.dual-chart-workspace {
+  display: grid;
+  grid-template-columns: minmax(470px, 1fr) minmax(520px, 1.12fr);
+  gap: 10px;
+  padding: 10px;
+  align-items: start;
+}
+
+.chart-pane {
+  border: 1px solid #9e977b;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+/* Left Pane: 子平八字 */
+.bazi-pane {
+  background-color: #fefee8;
+  background-image: linear-gradient(180deg, rgba(255, 254, 242, 0.95) 0%, rgba(252, 248, 227, 0.95) 100%);
+  padding: 10px 12px 14px;
+}
+
+/* Right Pane: 紫微斗數 */
+.ziwei-pane {
+  background-color: #f2f8ff;
+  background-image: linear-gradient(180deg, rgba(244, 250, 255, 0.95) 0%, rgba(235, 245, 255, 0.95) 100%);
+  padding: 10px 12px 14px;
+}
+
+.pane-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding-bottom: 6px;
+  margin-bottom: 8px;
+  border-bottom: 2px solid #c9be96;
+}
+
+.pane-title {
+  margin: 0;
+  font-size: 16px;
+  color: #1b365d;
+  font-weight: 700;
+}
+
+.reading-order-hint {
+  font-size: 11.5px;
+  color: #6b5630;
+  font-weight: 600;
+}
+
+/* Five Element Badges & Colors */
+.element-legend,
+.mutagen-legend {
+  display: flex;
+  gap: 4px;
+}
+
+.el-chip {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 11.5px;
+  font-weight: 700;
+  border: 1px solid currentColor;
+}
+
+.el-wood {
+  color: var(--el-wood);
+  background: var(--el-wood-bg);
+}
+
+.el-fire {
+  color: var(--el-fire);
+  background: var(--el-fire-bg);
+}
+
+.el-earth {
+  color: var(--el-earth);
+  background: var(--el-earth-bg);
+}
+
+.el-metal {
+  color: var(--el-metal);
+  background: var(--el-metal-bg);
+}
+
+.el-water {
+  color: var(--el-water);
+  background: var(--el-water-bg);
+}
+
+/* BaZi Metadata Banner */
+.bazi-meta-banner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  padding: 6px 10px;
+  margin-bottom: 8px;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid #d5cca6;
+  border-radius: 3px;
+  font-size: 12.5px;
+}
+
+.bazi-meta-item strong {
+  color: #1b365d;
+}
+
+/* Four Pillars Table */
+.four-pillars-table-wrap {
+  overflow-x: auto;
+  margin-bottom: 8px;
+}
+
+.four-pillars-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1.5px solid #8c7a53;
+}
+
+.four-pillars-table th,
+.four-pillars-table td {
+  border: 1px solid #bfb38c;
+  padding: 5px 6px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.four-pillars-table thead th {
+  background: linear-gradient(180deg, #f4ebd0 0%, #e4d4a7 100%);
+  color: #2b2416;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.col-sub {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 400;
+  color: #63563b;
+}
+
+.row-label-col {
+  width: 78px;
+  background: #f6f1de;
+  font-weight: 700;
+  color: #3d321e;
+  font-size: 12.5px;
+}
+
+.day-master-col,
+.day-master-cell {
+  background: rgba(255, 238, 179, 0.48) !important;
+  border-left: 2px solid #c62828 !important;
+  border-right: 2px solid #c62828 !important;
+}
+
+.day-master-badge {
+  display: inline-block;
+  padding: 1px 7px;
+  background: #c62828;
+  color: #ffffff;
+  border-radius: 3px;
+  font-weight: 700;
+  font-size: 12.5px;
+}
+
+.tengod-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #37474f;
+}
+
+.stem-char,
+.branch-char {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  font-size: 24px;
+  font-weight: 700;
+  border-radius: 6px;
+  border: 1.5px solid currentColor;
+  box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.6);
+}
+
+.char-sub-el {
+  display: block;
+  font-size: 11px;
+  margin-top: 2px;
+  font-weight: 600;
+}
+
+.hidden-stems-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: center;
+  font-size: 12px;
+}
+
+.hs-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.75);
+}
+
+.hs-god {
+  color: #455a64;
+  font-size: 11.5px;
+}
+
+.nayin-text {
+  font-weight: 700;
+  color: #5d4037;
+  font-size: 12.5px;
+}
+
+/* Extra Pillars Bar (胎元 / 命宮 / 身宮) */
+.extra-pillars-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 5px 10px;
+  margin-bottom: 10px;
+  background: rgba(246, 239, 214, 0.9);
+  border: 1px solid #c8bc94;
+  border-radius: 3px;
+  font-size: 12.5px;
+}
+
+/* --- Day Master Strength & Structure Analysis Panel (日主旺弱與格局喜忌) --- */
+.strength-inline-tag {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 11.5px;
+  font-weight: 700;
+}
+
+.strength-inline-tag.is-strong {
+  background: #ffebee;
+  color: #b71c1c;
+  border: 1px solid #ef9a9a;
+}
+
+.strength-inline-tag.is-weak {
+  background: #e3f2fd;
+  color: #0d47a1;
+  border: 1px solid #90caf9;
+}
+
+.strength-panel {
+  background: rgba(255, 255, 255, 0.88);
+  border: 1.5px solid #b8a87e;
+  border-radius: 4px;
+  padding: 8px 10px;
+  margin-bottom: 10px;
+}
+
+.strength-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding-bottom: 6px;
+  margin-bottom: 7px;
+  border-bottom: 1px solid #dcd3b2;
+}
+
+.strength-title-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.strength-section-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #1b365d;
+}
+
+.strength-main-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 12.5px;
+  font-weight: 700;
+}
+
+.badge-strong {
+  background: #c62828;
+  color: #ffffff;
+}
+
+.badge-weak {
+  background: #1565c0;
+  color: #ffffff;
+}
+
+.strength-sub-badge {
+  display: inline-block;
+  padding: 1px 6px;
+  background: #f5f0dc;
+  border: 1px solid #cbbd93;
+  border-radius: 3px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #3d321e;
+}
+
+.strength-override-note {
+  font-size: 11.5px;
+  color: #b71c1c;
+  font-weight: 700;
+}
+
+.structure-override-ctrl {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #1b365d;
+}
+
+.structure-select {
+  height: 22px;
+  font-weight: 700;
+}
+
+.strength-favorable-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-bottom: 7px;
+}
+
+.fav-box {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px 8px;
+  padding: 5px 8px;
+  border-radius: 3px;
+  font-size: 12px;
+}
+
+.fav-good {
+  background: rgba(198, 40, 40, 0.06);
+  border: 1px solid rgba(198, 40, 40, 0.35);
+}
+
+.fav-bad {
+  background: rgba(21, 101, 192, 0.06);
+  border: 1px solid rgba(21, 101, 192, 0.35);
+}
+
+.fav-tag-red {
+  display: inline-block;
+  padding: 1px 6px;
+  background: #c62828;
+  color: #fff;
+  border-radius: 2px;
+  font-weight: 700;
+  font-size: 11.5px;
+}
+
+.fav-tag-blue {
+  display: inline-block;
+  padding: 1px 6px;
+  background: #1565c0;
+  color: #fff;
+  border-radius: 2px;
+  font-weight: 700;
+  font-size: 11.5px;
+}
+
+.fav-gods-text {
+  color: #37474f;
+  font-size: 11.5px;
+}
+
+.wx-scores-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 5px;
+  margin-bottom: 6px;
+}
+
+.wx-score-card {
+  background: #faf7eb;
+  border: 1px solid #d5cab0;
+  border-radius: 3px;
+  padding: 4px 6px;
+}
+
+.wx-score-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2px;
+  margin-bottom: 3px;
+}
+
+.wx-rel {
+  font-size: 10.5px;
+  color: #455a64;
+  font-weight: 600;
+}
+
+.wx-fav-tag {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 0 4px;
+  border-radius: 2px;
+}
+
+.fav-red {
+  background: #ffebee;
+  color: #c62828;
+  border: 1px solid #ef9a9a;
+}
+
+.unfav-blue {
+  background: #e3f2fd;
+  color: #1565c0;
+  border: 1px solid #90caf9;
+}
+
+.wx-bar-track {
+  height: 5px;
+  background: #e5dec9;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 2px;
+}
+
+.wx-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+}
+
+.el-wood-fill { background: var(--el-wood); }
+.el-fire-fill { background: var(--el-fire); }
+.el-earth-fill { background: var(--el-earth); }
+.el-metal-fill { background: var(--el-metal); }
+.el-water-fill { background: var(--el-water); }
+
+.wx-pct {
+  font-size: 10.5px;
+  text-align: right;
+  color: #333;
+  font-weight: 700;
+}
+
+.strength-explanation {
+  font-size: 11.5px;
+  color: #4a3f2b;
+  background: #f8f3e3;
+  padding: 4px 8px;
+  border-radius: 3px;
+  border-left: 3px solid #9e1b1b;
+  line-height: 1.45;
+}
+
+/* --- Major Luck (八柱大運與八十流年全排總表) --- */
+.dayun-section {
+  background: rgba(255, 255, 255, 0.88);
+  border: 1.5px solid #b8a87e;
+  border-radius: 4px;
+  padding: 8px 10px;
+}
+
+.dayun-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding-bottom: 6px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #dcd3b2;
+  font-size: 12.5px;
+}
+
+.zero-age-banner {
+  padding: 6px 10px;
+  margin-bottom: 8px;
+  background: #fff3e0;
+  border: 1.5px solid #e65100;
+  border-radius: 4px;
+  color: #bf360c;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.dayun-full-table-wrap {
+  overflow-x: auto;
+}
+
+.dayun-full-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fffdf7;
+  border: 1.5px solid #8c7a53;
+  font-size: 12px;
+}
+
+.dayun-full-table th,
+.dayun-full-table td {
+  border: 1px solid #c9be9a;
+  padding: 3px 4px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.dy-row-label {
+  width: 56px;
+  min-width: 52px;
+  background: #f4ebd0;
+  color: #3d321e;
+  font-weight: 700;
+  font-size: 11.5px;
+  white-space: nowrap;
+}
+
+.dy-col-th {
+  background: linear-gradient(180deg, #f5ecd2 0%, #e5d5a8 100%);
+  color: #1b365d;
+  font-weight: 700;
+  font-size: 12px;
+  min-width: 66px;
+}
+
+.dy-th-top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+}
+
+.dy-fav-badge {
+  display: inline-block;
+  padding: 0 4px;
+  border-radius: 2px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.fav-pill-red {
+  background: #c62828;
+  color: #fff;
+}
+
+.fav-pill-blue {
+  background: #1565c0;
+  color: #fff;
+}
+
+.fav-pill-green {
+  background: #2e7d32;
+  color: #fff;
+}
+
+.dy-current-tag {
+  display: inline-block;
+  margin-top: 2px;
+  padding: 0 4px;
+  background: #2e7d32;
+  color: #ffffff;
+  border-radius: 2px;
+  font-size: 9.5px;
+  font-weight: 700;
+}
+
+.dy-col-current {
+  background: rgba(232, 245, 233, 0.78) !important;
+  border-left: 2px solid #2e7d32 !important;
+  border-right: 2px solid #2e7d32 !important;
+}
+
+.dy-col-current-ln {
+  background: rgba(232, 245, 233, 0.35);
+  border-left: 2px solid #2e7d32 !important;
+  border-right: 2px solid #2e7d32 !important;
+}
+
+.dy-age-num {
+  font-weight: 700;
+  color: #1b365d;
+  font-size: 11.5px;
+}
+
+.dy-yr-range {
+  font-size: 10px;
+  color: #5c5340;
+}
+
+.dy-gz-cell {
+  background: #fcf8eb;
+  padding: 5px 3px !important;
+}
+
+.dy-main-gz {
+  display: inline-flex;
+  gap: 2px;
+  margin-bottom: 2px;
+}
+
+.dy-char {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  font-size: 15px;
+  font-weight: 700;
+  border-radius: 3px;
+  border: 1px solid currentColor;
+}
+
+.dy-god-pair {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #37474f;
+}
+
+.dy-nayin-sub {
+  font-size: 10px;
+  color: #6d4c41;
+}
+
+.dy-pre-th,
+.dy-pre-cell {
+  background: #faf3e0;
+}
+
+.dy-pre-title {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #795548;
+}
+
+.dy-sub-note {
+  font-size: 9.5px;
+  color: #6d4c41;
+}
+
+.ln-matrix-cell {
+  padding: 3px 4px !important;
+  background: #ffffff;
+}
+
+.ln-matrix-cell:hover {
+  background: #fff9db;
+}
+
+.ln-is-current-year {
+  background: #fff3cd !important;
+  box-shadow: inset 0 0 0 2px #c62828;
+}
+
+.ln-zero-age-cell {
+  background: #ffe0b2 !important;
+}
+
+.ln-empty-cell {
+  background: #f5f1e4;
+}
+
+.ln-cell-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 9.5px;
+  color: #546e7a;
+  line-height: 1.1;
+  margin-bottom: 1px;
+}
+
+.ln-cell-age {
+  font-weight: 700;
+  color: #1b365d;
+}
+
+.ln-cell-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+}
+
+.ln-cell-gz {
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.ln-cell-gz span {
+  padding: 0 1px;
+  border-radius: 2px;
+}
+
+.ln-cell-gods {
+  font-size: 10px;
+  color: #455a64;
+  font-weight: 600;
+}
+
+.ln-fav-dot {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 0 2px;
+  border-radius: 2px;
+  line-height: 1.2;
+}
+
+.ln-fav-red {
+  color: #c62828;
+  background: rgba(198, 40, 40, 0.1);
+}
+
+.ln-fav-blue {
+  color: #1565c0;
+  background: rgba(21, 101, 192, 0.1);
+}
+
+.ln-fav-green {
+  color: #2e7d32;
+  background: rgba(46, 125, 50, 0.1);
+}
+
+/* --- Right Pane: 紫微斗數 4x4 Traditional Square Grid --- */
+.ziwei-grid-4x4 {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(118px, 1fr));
+  grid-template-rows: repeat(4, minmax(156px, auto));
+  gap: 4px;
+  background: #6c8ebf;
+  padding: 4px;
+  border: 2px solid #2b4c7e;
+  border-radius: 4px;
+}
+
+.zw-palace {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid #9ab3d5;
+  padding: 5px 6px;
+  min-height: 156px;
+  cursor: pointer;
+  transition: background 0.12s, box-shadow 0.12s;
+}
+
+.zw-palace:hover {
+  background: #ffffff;
+}
+
+.zw-palace.is-ming {
+  background: #fffdf2;
+  border: 2px solid #c62828;
+}
+
+.zw-palace.selected-palace {
+  box-shadow: inset 0 0 0 2px #1565c0;
+  background: #f0f7ff;
+}
+
+.zw-palace.trine-palace {
+  background: #f9fbe7;
+  border-color: #7cb342;
+}
+
+/* Palace Header */
+.zw-palace-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3px;
+  border-bottom: 1px solid #dce6f2;
+  padding-bottom: 3px;
+  margin-bottom: 4px;
+}
+
+.zw-palace-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1b365d;
+}
+
+.zw-palace.is-ming .zw-palace-title {
+  color: #c62828;
+}
+
+.zw-badges {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.zw-tag {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 0 4px;
+  border-radius: 2px;
+}
+
+.tag-body {
+  background: #c62828;
+  color: #ffffff;
+}
+
+.tag-origin {
+  background: #d48806;
+  color: #ffffff;
+}
+
+.zw-gz {
+  font-size: 12px;
+  font-weight: 700;
+  color: #546e7a;
+}
+
+/* Stars Area inside Palace */
+.zw-stars-body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+}
+
+.zw-major-stars {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px 6px;
+}
+
+.zw-major-star {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--crimson);
+}
+
+.star-bright {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #6d4c41;
+}
+
+.zw-minor-stars {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 5px;
+}
+
+.zw-minor-star {
+  display: inline-flex;
+  align-items: center;
+  gap: 1px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #1e466e;
+}
+
+.zw-minor-star.malefic-star {
+  color: #4a148c;
+}
+
+.zw-adj-stars {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 4px;
+  font-size: 10.5px;
+  color: #607d8b;
+}
+
+/* Four Transformation Badges [祿] [權] [科] [忌] */
+.mut-badge {
+  display: inline-block;
+  padding: 0 4px;
+  border-radius: 2px;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.35;
+}
+
+.mut-lu {
+  background: #2e7d32;
+}
+
+.mut-quan {
+  background: #c62828;
+}
+
+.mut-ke {
+  background: #1565c0;
+}
+
+.mut-ji {
+  background: #4a148c;
+}
+
+/* Palace Footer (大限 / 小限 / 十二長生) */
+.zw-palace-footer {
+  border-top: 1px dashed #d5e1ef;
+  padding-top: 3px;
+  margin-top: 4px;
+  font-size: 10.5px;
+  color: #455a64;
+}
+
+.zw-decadal-row {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 700;
+  color: #1b365d;
+}
+
+.zw-ages-row {
+  font-size: 10px;
+  color: #607d8b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Central 2x2 Court (中宮) */
+.zw-center-court {
+  grid-column: 2 / 4;
+  grid-row: 2 / 4;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 12px 14px;
+  background-color: #f4f9ff;
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(240, 248, 255, 0.95));
+  border: 2px solid #2b4c7e;
+  border-radius: 3px;
+}
+
+.zw-center-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1.5px solid #9ab3d5;
+  padding-bottom: 6px;
+}
+
+.zw-owner-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1b365d;
+}
+
+.zw-bureau-badge {
+  background: #9e1b1b;
+  color: #fff8dc;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 2px 9px;
+  border-radius: 3px;
+}
+
+.zw-center-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px 12px;
+  font-size: 12.5px;
+  margin: 8px 0;
+}
+
+.zw-center-item strong {
+  color: #1b365d;
+}
+
+.zw-sihua-box {
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid #b3c7e6;
+  border-radius: 4px;
+  padding: 6px 10px;
+}
+
+.zw-sihua-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #1b365d;
+  margin-bottom: 4px;
+}
+
+.zw-sihua-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  font-size: 12.5px;
+  font-weight: 700;
+}
+
+.zw-selected-palace-info {
+  font-size: 11.5px;
+  color: #263238;
+  background: rgba(255, 252, 235, 0.9);
+  border: 1px solid #d4c494;
+  border-radius: 3px;
+  padding: 5px 8px;
+}
+
+/* --- Modals --- */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(15, 23, 42, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.win-modal {
+  width: 100%;
+  max-width: 560px;
+  background: var(--win-bg);
+  border: 2px solid #1b365d;
+  border-radius: 4px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+}
+
+.win-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 12px;
+  background: linear-gradient(90deg, #1b365d 0%, #3764a0 100%);
+  color: #ffffff;
+}
+
+.win-modal-header h3 {
+  margin: 0;
+  font-size: 14px;
+}
+
+.modal-close {
+  background: #c62828;
+  color: #ffffff;
+  border: 1px solid #ffffff;
+  border-radius: 2px;
+  width: 22px;
+  height: 22px;
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.win-modal-body {
+  padding: 12px 14px;
+  max-height: 72vh;
+  overflow-y: auto;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.note-block {
+  background: var(--win-panel);
+  border: 1px solid var(--win-group-border);
+  border-radius: 3px;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+}
+
+.note-block h4 {
+  margin: 0 0 4px;
+  color: #9e1b1b;
+  font-size: 13.5px;
+}
+
+.note-block p {
+  margin: 0;
+}
+
+.dst-query-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.dst-output {
+  width: 100%;
+  font-weight: 700;
+  color: #9e1b1b;
+  background: #fffdf5;
+}
+
+.dst-hint {
+  font-size: 12px;
+  color: #555;
+  margin: 8px 0 0;
+}
+
+.win-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px 14px;
+  border-top: 1px solid var(--win-group-border);
+  background: #e4e0ce;
+}
+
+/* --- Responsive Breakpoints --- */
+@media (max-width: 1200px) {
+  .top-toolbar {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .dual-chart-workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .mobile-pane-tabs {
+    display: flex;
+  }
+}
+
+@media (max-width: 720px) {
+  .top-toolbar {
+    grid-template-columns: 1fr;
+    position: static;
+  }
+
+  .date-row {
+    flex-wrap: wrap;
+  }
+
+  .ziwei-grid-4x4 {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto;
+  }
+
+  .zw-center-court {
+    grid-column: 1 / -1;
+    grid-row: 1 / 2;
+  }
+}

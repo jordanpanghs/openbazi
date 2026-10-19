@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>OpenBaZi — 開源子平八字與紫微斗數雙盤推算系統</title>
+  <script>
+    window.OPENBAZI_VERSION = 'mvfcfuln';
+    (function () {
+      function checkLiveVersion() {
+        fetch('version.json?_=' + Date.now(), { cache: 'no-store' })
+          .then(function (r) { return r.ok ? r.json() : null; })
+          .then(function (data) {
+            if (data && data.version && data.version !== window.OPENBAZI_VERSION) {
+              var lastReloadedVer = sessionStorage.getItem('obz_reloaded_ver');
+              if (lastReloadedVer !== data.version) {
+                sessionStorage.setItem('obz_reloaded_ver', data.version);
+                if (window.caches && window.caches.keys) {
+                  window.caches.keys().then(function (keys) {
+                    keys.forEach(function (k) { window.caches.delete(k); });
+                  });
+                }
+                window.location.reload();
+              }
+            }
+          })
+          .catch(function () {});
+      }
+      checkLiveVersion();
+      document.addEventListener('visibilitychange', function () {
+        if (document.visibilityState === 'visible') checkLiveVersion();
+      });
+    })();
+  </script>
+  <link rel="stylesheet" href="src/app.css?v=mvfcfuln" />
+</head>
+<body>
+  <!-- Top Header Bar -->
+  <header class="app-titlebar">
+    <div class="brand-group">
+      <span class="brand-seal">命理</span>
+      <div>
+        <h1 class="app-title">OpenBaZi · 開源子平八字與紫微斗數雙盤系統</h1>
+        <span class="app-subtitle">子平八字 · 八柱大運流年 · 紫微斗數十二宮同步推算系統 · Created by jordanpang</span>
+      </div>
+    </div>
+
+    <nav class="dialog-triggers">
+      <button type="button" class="btn-utility btn-pdf" id="btnSavePdf" title="將當前命盤匯出為 PDF 檔案 (Export to PDF)">📄 下載 PDF <span class="en-sub">Export</span></button>
+      <button type="button" class="btn-utility" id="btnCopyShareUrl" title="複製當前命盤網址連結 (Copy Shareable URL)">🔗 複製連結 <span class="en-sub">Share</span></button>
+      <button type="button" class="btn-utility" id="btnResetDefault" title="重置為預設命盤 (Reset to Default)">↺ 重置預設 <span class="en-sub">Reset</span></button>
+      <button type="button" class="btn-utility" id="btnOpenDstModal" title="歷史夏令時間查詢 (Daylight Saving Time)">夏令時間 <span class="en-sub">DST</span></button>
+      <button type="button" class="btn-utility" id="btnOpenNotesModal" title="起大運與立春0歲修正說明 (Calculation Guide)">起運說明 <span class="en-sub">Guide</span></button>
+      <button type="button" class="btn-utility" id="btnOpenAboutModal" title="關於 OpenBaZi (About)">關於 <span class="en-sub">About</span></button>
+    </nav>
+  </header>
+
+  <!-- Sticky Top Input Toolbar -->
+  <section class="top-toolbar" aria-label="命盤資料輸入工具列">
+    <!-- GroupBox 1: 姓名及性別 -->
+    <fieldset class="dlg-groupbox group-identity">
+      <legend>姓名及性別 <span class="en-sub">Name &amp; Gender</span></legend>
+      <div class="identity-controls">
+        <label for="inputName" class="sr-only">姓名 Name</label>
+        <input
+          type="text"
+          id="inputName"
+          class="win-input name-input"
+          value="無名氏"
+          placeholder="輸入姓名 / Enter Name"
+        />
+        <div class="gender-radios" role="radiogroup" aria-label="性別 Gender">
+          <label class="radio-label">
+            <input type="radio" name="gender" id="genderMale" value="男" checked />
+            <span>男 <span class="en-unit">Male</span></span>
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="gender" id="genderFemale" value="女" />
+            <span>女 <span class="en-unit">Female</span></span>
+          </label>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- GroupBox 2: 出生日期 (陽曆 / 農曆 雙向同步) -->
+    <fieldset class="dlg-groupbox group-birthdate">
+      <legend>出生日期 <span class="en-sub">Birth Date &amp; Time (1901–2043)</span></legend>
+      <div class="date-rows">
+        <!-- Solar Row -->
+        <div class="date-row">
+          <span class="row-tag solar-tag" title="Gregorian / Solar Calendar">陽曆 <span class="en-tag">Solar</span></span>
+          <select id="solarYear" class="win-select year-select" aria-label="陽曆年 Year"></select>
+          <span class="unit-label">年<span class="en-unit">Y</span></span>
+          <select id="solarMonth" class="win-select month-select" aria-label="陽曆月 Month"></select>
+          <span class="unit-label">月<span class="en-unit">M</span></span>
+          <select id="solarDay" class="win-select day-select" aria-label="陽曆日 Day"></select>
+          <span class="unit-label">日<span class="en-unit">D</span></span>
+          <select id="solarHour" class="win-select hour-select" aria-label="陽曆時辰 Birth Hour"></select>
+          <select id="solarMinute" class="win-select minute-select" aria-label="陽曆分鐘 Minute" title="精確分鐘 Minute"></select>
+          <span class="unit-label">分<span class="en-unit">Min</span></span>
+          <button type="button" id="btnSolarToLunar" class="win-btn" title="由陽曆轉換農曆並排盤 (Convert Solar to Lunar)">轉農曆 <span class="en-unit">→Lunar</span></button>
+        </div>
+
+        <!-- Lunar Row -->
+        <div class="date-row">
+          <span class="row-tag lunar-tag" title="Chinese Lunar Calendar">農曆 <span class="en-tag">Lunar</span></span>
+          <select id="lunarYear" class="win-select year-select" aria-label="農曆年 Lunar Year"></select>
+          <span class="unit-label">年<span class="en-unit">Y</span></span>
+          <select id="lunarMonth" class="win-select month-select" aria-label="農曆月 Lunar Month"></select>
+          <span class="unit-label">月<span class="en-unit">M</span></span>
+          <label class="checkbox-inline" title="是否為農曆閏月 (Leap Month)">
+            <input type="checkbox" id="lunarLeap" />
+            <span>閏<span class="en-unit">Leap</span></span>
+          </label>
+          <select id="lunarDay" class="win-select day-select" aria-label="農曆日 Lunar Day"></select>
+          <span class="unit-label">日<span class="en-unit">D</span></span>
+          <select id="lunarHour" class="win-select hour-select" aria-label="農曆時辰 Lunar Hour"></select>
+          <button type="button" id="btnLunarToSolar" class="win-btn" title="由農曆轉換陽曆並排盤 (Convert Lunar to Solar)">轉陽曆 <span class="en-unit">→Solar</span></button>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- GroupBox 3: 四柱八字 (Manual Override Mode) -->
+    <fieldset class="dlg-groupbox group-pillars">
+      <legend>四柱八字 <span class="en-sub">Four Pillars (Manual)</span></legend>
+      <div class="pillars-toolbar-grid">
+        <!-- 4 Pillar Columns: 年柱, 月柱, 日柱, 時柱 -->
+        <div class="pillar-selector-col">
+          <span class="pillar-col-header">年柱 <span class="en-unit">Yr</span></span>
+          <select id="yearStem" class="win-select gz-select" aria-label="年干 Year Stem"></select>
+          <select id="yearBranch" class="win-select gz-select" aria-label="年支 Year Branch"></select>
+        </div>
+        <div class="pillar-selector-col">
+          <span class="pillar-col-header">月柱 <span class="en-unit">Mo</span></span>
+          <select id="monthStem" class="win-select gz-select" aria-label="月干 Month Stem"></select>
+          <select id="monthBranch" class="win-select gz-select" aria-label="月支 Month Branch"></select>
+        </div>
+        <div class="pillar-selector-col">
+          <span class="pillar-col-header">日柱 <span class="en-unit">Day</span></span>
+          <select id="dayStem" class="win-select gz-select" aria-label="日干 Day Stem"></select>
+          <select id="dayBranch" class="win-select gz-select" aria-label="日支 Day Branch"></select>
+        </div>
+        <div class="pillar-selector-col">
+          <span class="pillar-col-header">時柱 <span class="en-unit">Hr</span></span>
+          <select id="hourStem" class="win-select gz-select" aria-label="時干 Hour Stem"></select>
+          <select id="hourBranch" class="win-select gz-select" aria-label="時支 Hour Branch"></select>
+        </div>
+
+        <!-- Pre-LiChun Checkbox & Start Age Dropdown -->
+        <div class="pillar-options-col">
+          <label class="checkbox-inline prelichun-check" title="元旦後立春前出生，多排一柱「0歲」修正年歲差 (Born before LiChun solar term)">
+            <input type="checkbox" id="preLiChun" />
+            <span>立春前 <span class="en-unit">Pre-LiChun</span></span>
+          </label>
+          <div class="start-age-row">
+            <label for="manualStartAge" class="unit-label">起運 <span class="en-unit">Age</span></label>
+            <select id="manualStartAge" class="win-select age-select" title="指定起運歲數 (Start Age of Luck Pillars)">
+              <option value="auto">自動 Auto</option>
+              <option value="1">1歲</option>
+              <option value="2">2歲</option>
+              <option value="3">3歲</option>
+              <option value="4">4歲</option>
+              <option value="5">5歲</option>
+              <option value="6">6歲</option>
+              <option value="7">7歲</option>
+              <option value="8">8歲</option>
+              <option value="9">9歲</option>
+              <option value="10">10歲</option>
+            </select>
+          </div>
+          <button type="button" id="btnApplyPillars" class="win-btn btn-pillars" title="以手動指定之四柱八字排盤 (Calculate from Pillars)">依四柱排盤 <span class="en-unit">Apply</span></button>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- GroupBox 4: 更新命盤 -->
+    <fieldset class="dlg-groupbox group-update">
+      <legend>更新命盤 <span class="en-sub">Update</span></legend>
+      <div class="update-controls">
+        <label class="radio-label">
+          <input type="radio" name="updateMode" id="modeAuto" value="auto" checked />
+          <span>自動 <span class="en-unit">Auto</span></span>
+        </label>
+        <label class="radio-label">
+          <input type="radio" name="updateMode" id="modeManual" value="manual" />
+          <span>手動 <span class="en-unit">Manual</span></span>
+        </label>
+        <button type="button" id="btnCalculate" class="win-btn btn-primary">更新 <span class="en-sub">Run</span></button>
+      </div>
+    </fieldset>
+  </section>
+
+  <!-- Mobile / Tablet View Switcher -->
+  <div class="mobile-pane-tabs" role="tablist" aria-label="切換八字與紫微斗數命盤">
+    <button type="button" class="pane-tab active" data-pane="both">雙盤並排 <span class="en-sub">Dual</span></button>
+    <button type="button" class="pane-tab" data-pane="bazi">子平八字盤 <span class="en-sub">BaZi</span></button>
+    <button type="button" class="pane-tab" data-pane="ziwei">紫微斗數盤 <span class="en-sub">Zi Wei</span></button>
+  </div>
+
+  <!-- Main Dual-Chart Responsive Canvas -->
+  <main class="dual-chart-workspace" id="workspaceContainer">
+    <!-- LEFT PANE: 子平八字 (Four Pillars & Major Luck) -->
+    <section class="chart-pane bazi-pane" id="baziPane" aria-label="子平八字命盤">
+      <div class="pane-header">
+        <div class="pane-title-wrap">
+          <h2 class="pane-title">子平八字命盤 <span class="en-sub">Four Pillars of Destiny (BaZi)</span></h2>
+          <span class="reading-order-hint">← 傳統由右至左排列：年柱 · 月柱 · 日柱（日元） · 時柱</span>
+        </div>
+        <div class="element-legend" aria-label="五行顏色圖例">
+          <span class="el-chip el-wood">木 Wood</span>
+          <span class="el-chip el-fire">火 Fire</span>
+          <span class="el-chip el-earth">土 Earth</span>
+          <span class="el-chip el-metal">金 Metal</span>
+          <span class="el-chip el-water">水 Water</span>
+        </div>
+      </div>
+
+      <!-- Summary Banner -->
+      <div class="bazi-meta-banner" id="baziMetaBanner"></div>
+
+      <!-- Four Pillars Table (Columns Right-to-Left: 時柱 | 日柱 | 月柱 | 年柱) -->
+      <div class="four-pillars-table-wrap">
+        <table class="four-pillars-table" id="fourPillarsTable">
+          <thead>
+            <tr>
+              <th class="row-label-col">項目 <span class="col-sub">Item</span></th>
+              <th class="pillar-col">時柱 <span class="col-sub">(Hour)</span></th>
+              <th class="pillar-col day-master-col">日柱 · 日元 <span class="col-sub">(Day Master)</span></th>
+              <th class="pillar-col">月柱 <span class="col-sub">(Month)</span></th>
+              <th class="pillar-col">年柱 <span class="col-sub">(Year)</span></th>
+            </tr>
+          </thead>
+          <tbody id="fourPillarsBody"></tbody>
+        </table>
+      </div>
+
+      <!-- Extra Pillars Bar (胎元 / 命宮 / 身宮) -->
+      <div class="extra-pillars-bar" id="extraPillarsBar"></div>
+
+      <!-- Day Master Strength & Structure Analysis (日主旺弱與格局喜忌分析) -->
+      <div class="strength-panel" id="baziStrengthPanel" aria-label="日主旺弱與格局喜忌分析">
+        <div class="strength-header">
+          <div class="strength-title-group">
+            <span class="strength-section-title">日主旺弱與格局喜忌 <span class="en-sub">Strength &amp; Structure</span></span>
+            <span id="strengthBadgeWrap"></span>
+          </div>
+          <div class="structure-override-ctrl" title="指定格局：可自動推算或手動指定六種格局 (Structure Override)">
+            <label for="manualStructureSelect">指定格局 <span class="en-unit">Pattern</span>：</label>
+            <select id="manualStructureSelect" class="win-select structure-select">
+              <option value="auto">自動推算 Auto</option>
+              <option value="身旺">身旺 (Strong)</option>
+              <option value="身弱">身弱 (Weak)</option>
+              <option value="專旺">專旺 (Dominant)</option>
+              <option value="假專旺">假專旺 (Quasi-Dom.)</option>
+              <option value="從格">從格 (Follow)</option>
+              <option value="假從格">假從格 (Quasi-Follow)</option>
+            </select>
+          </div>
+        </div>
+        <div class="strength-body" id="baziStrengthBody"></div>
+      </div>
+
+      <!-- Major Luck (八柱大運與八十流年一次全排總表) -->
+      <div class="dayun-section">
+        <div class="dayun-header" id="dayunHeader"></div>
+
+        <!-- Pre-LiChun 0歲 Notice Box -->
+        <div class="zero-age-banner hidden" id="zeroAgeBanner"></div>
+
+        <!-- Full 8-Pillar DaYun + 10-Row LiuNian Matrix -->
+        <div class="dayun-full-table-wrap" id="dayunFullTableWrap"></div>
+      </div>
+    </section>
+
+    <!-- RIGHT PANE: 紫微斗數 (Traditional 12-Palace 4x4 Grid) -->
+    <section class="chart-pane ziwei-pane" id="ziweiPane" aria-label="紫微斗數十二宮命盤">
+      <div class="pane-header">
+        <div class="pane-title-wrap">
+          <h2 class="pane-title">紫微斗數命盤 <span class="en-sub">Zi Wei Dou Shu (12 Palaces)</span></h2>
+          <span class="reading-order-hint">傳統十二地支四方盤 · 點擊宮位可檢視三方四正與星曜詳情</span>
+        </div>
+        <div class="mutagen-legend" aria-label="四化圖例">
+          <span class="mut-badge mut-lu">祿</span>
+          <span class="mut-badge mut-quan">權</span>
+          <span class="mut-badge mut-ke">科</span>
+          <span class="mut-badge mut-ji">忌</span>
+        </div>
+      </div>
+
+      <!-- 4x4 Traditional Square Grid -->
+      <div class="ziwei-grid-4x4" id="ziweiGrid"></div>
+    </section>
+  </main>
+
+  <!-- Modal 1: 起大運與立春0歲修正說明 -->
+  <div class="modal-backdrop hidden" id="notesModal" role="dialog" aria-modal="true" aria-labelledby="notesModalTitle">
+    <div class="win-modal">
+      <div class="win-modal-header">
+        <h3 id="notesModalTitle">起大運與立春「0歲」年歲差修正說明</h3>
+        <button type="button" class="modal-close" data-close="notesModal">&times;</button>
+      </div>
+      <div class="win-modal-body">
+        <div class="note-block">
+          <h4>立春交界與「0歲」年歲差修正</h4>
+          <p>子平八字以「立春」為歲首。凡在西曆元旦（1月1日）後、立春前出生者，其八字年柱仍屬上一干支年（例如西曆2004年1月15日出生，立春前之年柱為癸未而非甲申）。為避免流年干支與西曆年份脫節導致虛歲偏大一歲，系統自動將立春前所屬之干支年標示為「0歲」，並將出生當年的立春後干支定為「1歲」流年。</p>
+        </div>
+        <div class="note-block">
+          <h4>手動四柱模式之「立春前」選項</h4>
+          <p>當使用者直接以「四柱八字」手動指定干支排盤時，可自由勾選「立春前」選項。若勾選「立春前」，系統會自動於流年表排入「0歲」柱以對齊年歲；若未勾選，則預設為立春後出生，直接由「1歲」起算。</p>
+        </div>
+        <div class="note-block">
+          <h4>精確交節扣實日時數起運法</h4>
+          <p>系統採用嚴格節氣交節時刻計算起運歲數（陽男陰女順數至下一節、陰男陽女逆數至上一節），以實足日數與時辰折算（三天折合一歲、一日折合四個月、一時辰折合十天），精確推算上運年齡與交運日期。</p>
+        </div>
+      </div>
+      <div class="win-modal-footer">
+        <button type="button" class="win-btn btn-primary" data-close="notesModal">確定</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: 夏令時間查詢 -->
+  <div class="modal-backdrop hidden" id="dstModal" role="dialog" aria-modal="true" aria-labelledby="dstModalTitle">
+    <div class="win-modal">
+      <div class="win-modal-header">
+        <h3 id="dstModalTitle">港澳台及中國大陸歷史夏令時間查詢</h3>
+        <button type="button" class="modal-close" data-close="dstModal">&times;</button>
+      </div>
+      <div class="win-modal-body">
+        <fieldset class="dlg-groupbox">
+          <legend>夏令時間查詢</legend>
+          <div class="dst-query-row">
+            <span>於</span>
+            <select id="dstYear" class="win-select"></select>
+            <span>年，在</span>
+            <select id="dstRegion" class="win-select">
+              <option value="香港">香港</option>
+              <option value="台灣">台灣</option>
+              <option value="中國大陸">中國大陸</option>
+              <option value="澳門">澳門</option>
+            </select>
+            <span>之夏令時間為：</span>
+          </div>
+          <input type="text" id="dstResult" class="win-input dst-output" readonly />
+        </fieldset>
+        <p class="dst-hint">提示：若命主出生於上述夏令時間實施期間，請將出生鐘點撥慢一小時後再輸入命盤。</p>
+      </div>
+      <div class="win-modal-footer">
+        <button type="button" class="win-btn btn-primary" data-close="dstModal">確定</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: 關於 OpenBaZi -->
+  <div class="modal-backdrop hidden" id="aboutModal" role="dialog" aria-modal="true" aria-labelledby="aboutModalTitle">
+    <div class="win-modal">
+      <div class="win-modal-header">
+        <h3 id="aboutModalTitle">關於 OpenBaZi（開源子平八字與紫微斗數雙盤系統）</h3>
+        <button type="button" class="modal-close" data-close="aboutModal">&times;</button>
+      </div>
+      <div class="win-modal-body about-grid">
+        <p><strong>OpenBaZi — 開源子平八字與紫微斗數雙盤推算系統</strong></p>
+        <p>Copyright (c) 2026 <strong>jordanpang</strong></p>
+        <hr />
+        <p><strong>開源授權 (Open License)：</strong>本專案採用 <code>MIT License</code> 開源授權，完全免費開放予所有人自由使用、研究、修改與分享 (Free for all to use)。</p>
+        <p><strong>核心曆法與排盤引擎：</strong>整合 <code>lunar-javascript</code>（節氣四柱、晚子時日柱、扣實日時起運、日主旺弱格局分析）與 <code>iztro</code>（紫微斗數十二宮安星與四化推算）。</p>
+      </div>
+      <div class="win-modal-footer">
+        <button type="button" class="win-btn btn-primary" data-close="aboutModal">確定</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="src/astrologyEngine.bundle.js?v=mvfcfuln"></script>
+  <script src="src/app.js?v=mvfcfuln"></script>
+</body>
+</html>
